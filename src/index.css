@@ -1,0 +1,48 @@
+/* tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+/* font */
+@layer base {
+  @font-face {
+    font-family: 'Robot-Light';
+    src: url('./assets/fonts/Roboto-Light.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Robot-Regular';
+    src: url('./assets/fonts/Roboto-Regular.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Robot-Medium';
+    src: url('./assets/fonts/Roboto-Medium.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Robot-Bold';
+    src: url('./assets/fonts/Roboto-Bold.ttf') format('truetype');
+  }
+}
+
+
+
+/* tags */
+main {
+  height: 100vh;
+  color: black;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  user-select: none;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+main.bg-1 {
+  background-image: url('./assets/img/bg-1.png');
+}
+main.bg-2 {
+  background-image: url('./assets/img/bg-2.png');
+}
