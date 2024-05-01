@@ -5,6 +5,7 @@ import { EditProfile } from '../routes/edit-profile';
 import { ForgotPassword } from '../routes/forgot-password';
 import { JobList } from '../routes/job-list';
 import { AboutUs } from '../routes/about-us';
+import { Message } from '../routes/message';
 import { JobDetail as JobProviderJobDetail } from '../routes/_job-provider/job-detail';
 import { PostedJobList } from '../routes/_job-provider/posted-job-list';
 import { PostJob as JobProviderPostJob } from '../routes/_job-provider/post-job';
@@ -43,6 +44,7 @@ const Router = () => {
           <Route path='/about-us' element={<AboutUs />} />
           <Route path='/profile/:id' element={<Profile />} />
           <Route path='/edit-profile' element={<EditProfile />} />
+          <Route path='/message/:message' element={<Message />} />
 
           {/* specific routes depending on user type */}
           {(user.role === 'jobSeeker') ? (

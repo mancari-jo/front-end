@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -5,6 +6,7 @@ import { logo } from '../../assets/img';
 import { burger } from '../../assets/svg';
 import { Button } from '../../components/button';
 import { Select } from '../../components/select';
+import { BASE_URL } from '../../constants';
 import { clearUser } from '../../redux/reducers/userSlice';
 
 
@@ -30,6 +32,7 @@ const Nav = ({
   const dispatch = useDispatch();
 
   const [headerProfileOptionIndex, setHeaderProfileOptionIndex] = useState('0');
+  const [userAcceptedJobId, setUserAcceptedJobId] = useState(null);
 
 
 
@@ -40,6 +43,8 @@ const Nav = ({
     else if (headerProfileOptionIndex === '4') handleExitOnPress();
     
     setHeaderProfileOptionIndex('0');
+
+    checkForNewMessage();
   }, [headerProfileOptionIndex]);
 
 
@@ -49,8 +54,40 @@ const Nav = ({
   /**
    * Menangani klik pada tombol "Pesan".
    */
-  function handleMessageOnClick() {
-    console.log('handleMessageOnClick');
+  async function handleMessageOnClick() {
+    if (userAcceptedJobId) {
+      try {
+        const acceptedJobRes = await axios.get(`${BASE_URL}/job/${userAcceptedJobId}`);
+        if (!acceptedJobRes.data?.status) throw new Error();
+
+        let message = '';
+        const newAcceptedApplicantList = acceptedJobRes.data.data.diterima.map(acceptedApplicant => {
+          if (acceptedApplicant.idPelamar === user.id) {
+            message = acceptedApplicant.pesanNotifikasi;
+
+            return {
+              ...acceptedApplicant,
+              statusBacaNotifikasi: true
+            }
+          }
+
+          return acceptedApplicant;
+        });
+
+        const newJobData = {
+          ...acceptedJobRes.data.data,
+          diterima: newAcceptedApplicantList
+        };
+
+        const updateJobRes = await axios.patch(`${BASE_URL}/job/${userAcceptedJobId}`, newJobData);
+        if (!updateJobRes.data?.status) throw new Error();
+
+        setUserAcceptedJobId(null);
+        navigate(`/message/${message}`);
+      } catch (err) {
+        console.error('Unable to get job where user is accepted: ', err);
+      }
+    }
   }
 
   /**
@@ -66,6 +103,27 @@ const Nav = ({
   function handleExitOnPress() {
     dispatch(clearUser());
     navigate('/job-list');
+  }
+
+  /**
+   * Mencari tahu apakah ada pesan baru untuk pencari kerja.
+   */
+  async function checkForNewMessage() {
+    try {
+      // mengambil semua list pekerjaan
+      const jobList = await axios.get(`${BASE_URL}/job`);
+      if (!jobList.data?.status) throw new Error();
+
+      // mengumpulkan pencari-pencari kerja yang diterima pada semua pekerjaan
+      const acceptedApplicantOnAllJobList = jobList.data.data.map(job => ({id: job._id, acceptedApplicantList: job.diterima.map(applicant => ({id: applicant.idPelamar, notificationMessage: applicant.pesanNotifikasi, readStatus: applicant.statusBacaNotifikasi}))})).flat()
+      acceptedApplicantOnAllJobList.forEach(job => {
+        job.acceptedApplicantList.forEach(applicant => {
+          if (user.id === applicant.id && !applicant.readStatus) setUserAcceptedJobId(job.id);
+        });
+      });
+    } catch (err) {
+      console.error('Unable to get user data: ', err);
+    }
   }
 
 
@@ -128,7 +186,7 @@ const Nav = ({
               ['0', 'Profil'],
               ['1', 'Lihat Profil'],
               ['2', 'Atur Preferensi'],
-              ['3', 'Pesan'],
+              ['3', userAcceptedJobId ? 'Ada Pesan Baru!' : 'Tidak ada pesan baru'],
               ['4', 'Keluar']
             ]}
           />

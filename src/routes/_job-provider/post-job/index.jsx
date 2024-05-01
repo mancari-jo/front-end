@@ -67,7 +67,7 @@ const PostJob = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (!name || (preferences.length === 0) || !requirements || !address || !salary || startWorkingHour === '' || startWorkingHour > 23 || startWorkingMinute === '' || startWorkingMinute > 59 || endWorkingHour === '' || endWorkingHour > 23 || endWorkingMinute === '' || endWorkingMinute > 59 || startWorkingHour > endWorkingHour) return;
+    if (!name || (preferences.length === 0) || !requirements || !address || !salary || startWorkingHour === '' || parseInt(startWorkingHour) > 23 || startWorkingMinute === '' || parseInt(startWorkingMinute) > 59 || endWorkingHour === '' || parseInt(endWorkingHour) > 23 || endWorkingMinute === '' || parseInt(endWorkingMinute) > 59 || startWorkingHour > endWorkingHour) return;
     
     try {
       setIsFormSubmitting(true);
