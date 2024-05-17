@@ -1,5 +1,5 @@
-// const BASE_URL = 'https://mancari-jo-be-three.vercel.app/api';
-const BASE_URL = 'http://localhost:3001/api';
+const BASE_URL = 'https://mancari-jo-be-three.vercel.app/api';
+// const BASE_URL = 'http://localhost:3001/api';
 
 
 

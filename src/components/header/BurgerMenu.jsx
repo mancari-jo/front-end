@@ -22,7 +22,7 @@ const BurgerMenu = ({
 }) => {
   return (
     <div className={`${!isBurgerOpened ? 'hidden' : 'flex'} flex-col absolute h-full w-full z-10`}>
-      <div className='bg-white flex flex-col items-center pb-4 gap-4'>
+      <div className='bg-white flex flex-col items-center pb-2 gap-2'>
         <Button theme='tertiary' onClick={handleFindJobOnClick}>
           Cari Pekerjaan
         </Button>
@@ -30,6 +30,13 @@ const BurgerMenu = ({
           <Button theme='tertiary' onClick={handlePostJobOnClick}>
             Tambah Pekerjaan
           </Button>
+        )}
+        {(user?.role === 'jobSeeker') && (
+          <div>
+            <Button theme='tertiary' onClick={() => navigate('/applied-job-list')}>
+              Lihat Daftar Pekerjaan
+            </Button>
+          </div>
         )}
         {(user?.role === 'jobProvider') && (
           <Button theme='tertiary' onClick={() => navigate('/posted-job-list')}>

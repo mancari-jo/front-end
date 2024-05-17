@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../../../components/button';
 import { Header } from '../../../components/header';
 import { BASE_URL } from '../../../constants';
+import convertToProperSalaryString from '../../../utils/convertToProperSalaryString';
 
 
 
@@ -258,7 +259,7 @@ const JobDetail = () => {
                 <p className='flex'>
                   <span className='w-40'>Gaji</span>
                   <span>:</span>
-                  <span className='ml-2 flex-1'>Rp. {job.gaji}</span>
+                  <span className='ml-2 flex-1'>Rp. {convertToProperSalaryString(job.gaji)}</span>
                 </p>
                 <p className='flex'>
                   <span className='w-40'>Jam Kerja</span>

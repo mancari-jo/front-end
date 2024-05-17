@@ -15,7 +15,7 @@ const AboutUs = () => {
       {Nav}
       <div className='flex-1 relative flex overflow-auto'>
         {BurgerMenu}
-        <div className='flex-1 m-4 sm:m-8 p-2 sm:p-4 rounded-lg bg-neutral-300 text-xl overflow-auto'>
+        <div className='flex-1 m-4 p-4 rounded-lg bg-neutral-300 text-xs overflow-auto'>
           <p>Tentang Kami</p>
           <p>MancariJo: Solusi Tepat untuk Kebutuhan Pekerjaan di Minahasa Utara</p>
           <br />

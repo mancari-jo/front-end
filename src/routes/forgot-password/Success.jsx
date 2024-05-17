@@ -10,7 +10,7 @@ import { Button } from '../../components/button';
 const Success = ({ navigate }) => {
   return (
     <div className='flex flex-col gap-4'>
-      <h3 className='text-center text-xl'>Kata Sandi berhasil diubah</h3>
+      <h3 className='text-center text-sm'>Kata Sandi berhasil diubah</h3>
 
       <Button onClick={() => navigate(-1)}>Kembali</Button>
     </div>

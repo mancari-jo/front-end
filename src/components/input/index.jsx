@@ -32,7 +32,7 @@ const Input = ({
 
   
   return (
-    <div className='text-base text-black flex flex-col'>
+    <div className='text-xs text-black flex flex-col'>
       <label>{label}</label>
       <div className='flex-1 flex rounded items-center gap-1 bg-white'>
         <input
@@ -42,15 +42,19 @@ const Input = ({
           type={isValueHidden ? 'password' : type}
           required={required}
           disabled={disabled}
-          className='flex-1 p-2 rounded disabled:hover:cursor-not-allowed'
+          className='flex-1 p-1 rounded disabled:hover:cursor-not-allowed'
         />
         {hidden && (
           <button
             onClick={() => setIsValueHidden(!isValueHidden)}
             type='button'
-            className='p-2'
+            className='p-1'
           >
-            <img src={hide} alt='hide' />
+            <img
+              src={hide}
+              alt='hide'
+              className='h-4 w-4'
+            />
           </button>
         )}
       </div>

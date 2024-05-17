@@ -23,8 +23,9 @@ const SignUp = () => {
   const [birthplace, setBirthplace] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [address, setAddress] = useState('');
-  const [lastEducation, setLastEducation] = useState('SD');
   const [role, setRole] = useState('jobSeeker');
+  const [securityQuestion, setSecurityQuestion] = useState('');
+  const [securityQuestionAnswer, setSecurityQuestionAnswer] = useState('');
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
 
@@ -39,7 +40,7 @@ const SignUp = () => {
     try {
       setIsFormSubmitting(true);
 
-      if (!username || !password || !passwordConfirmation || (password !== passwordConfirmation) || !name) return;
+      if (!username || !password || !passwordConfirmation || (password !== passwordConfirmation) || !name || !securityQuestion || !securityQuestionAnswer) return;
 
       const payload = {
         namaPengguna: username,
@@ -48,8 +49,11 @@ const SignUp = () => {
         tempatLahir: birthplace,
         tanggalLahir: birthDate,
         alamat: address,
-        pendidikanTerakhir: lastEducation,
-        role
+        role,
+        pemulihanKataSandi: {
+          pertanyaan: securityQuestion,
+          jawaban: securityQuestionAnswer
+        }
       };
 
       const res = await axios.post(`${BASE_URL}/auth/register`, payload);
@@ -68,18 +72,32 @@ const SignUp = () => {
 
   return (
     <main className='bg-1 justify-center items-center p-4'>
-      <img src={logo} alt='logo' className='h-64' />
+      <div className='absolute top-2 left-2'>
+        <Button theme='tertiary' onClick={() => navigate(-1)}>Kembali</Button>
+      </div>
 
-      <form onSubmit={handleFormOnSubmit} className='bg-neutral-100 p-8 rounded-2xl flex flex-col gap-4 w-full max-w-96 shadow-2xl overflow-auto'>
+      <img src={logo} alt='logo' className='h-32' />
+
+      <form onSubmit={handleFormOnSubmit} className='bg-neutral-100 p-4 rounded-2xl flex flex-col gap-4 w-full max-w-96 shadow-2xl overflow-auto'>
         <div className='italic text-center text-xs'>
           <p>Dengan membuat akun atau masuk,</p>
           <p>anda memahami dan menyetujui ketentuan MancariJo.</p>
           <p>Anda juga mengakui kebijakan 'Cookie & Privacy' kami.</p>
         </div>
 
-        <h2 className='text-2xl text-center'>
+        <h2 className='text-sm text-center'>
           Daftar Akun
         </h2>
+
+        <Select
+          theme='secondary'
+          value={role}
+          onChange={setRole}
+          options={[
+            ['jobSeeker', 'Pencari Kerja'],
+            ['jobProvider', 'Penyedia Kerja']
+          ]}
+        />
 
         <Input
           placeholder='Nama Pengguna'
@@ -119,7 +137,7 @@ const SignUp = () => {
         {role === 'jobSeeker' && (
           <>
             <Input
-              label='Tempat Lahir'
+              placeholder='Tempat Lahir'
               value={birthplace}
               onChange={setBirthplace}
               required
@@ -127,7 +145,7 @@ const SignUp = () => {
             />
 
             <Input
-              label='Tanggal Lahir'
+              placeholder='Tanggal Lahir'
               value={birthDate}
               onChange={setBirthDate}
               type='date'
@@ -135,25 +153,8 @@ const SignUp = () => {
               disabled={isFormSubmitting}
             />
 
-            <Select
-              label='Pendidikan Terakhir'
-              theme='secondary'
-              value={lastEducation}
-              onChange={setLastEducation}
-              options={[
-                ['SD', 'SD'],
-                ['SMP', 'SMP'],
-                ['SMA', 'SMA'],
-                ['Diploma', 'Diploma'],
-                ['S1', 'S1'],
-                ['S2', 'S2'],
-                ['S3', 'S3']
-              ]}
-              disabled={isFormSubmitting}
-            />
-
             <Input
-              label='Alamat'
+              placeholder='Alamat'
               value={address}
               onChange={setAddress}
               required
@@ -162,17 +163,23 @@ const SignUp = () => {
           </>
         )}
 
-        <Select
-          theme='secondary'
-          value={role}
-          onChange={setRole}
-          options={[
-            ['jobSeeker', 'Pencari Kerja'],
-            ['jobProvider', 'Penyedia Kerja']
-          ]}
+        <Input
+          placeholder='Pertanyaan Keamanan'
+          value={securityQuestion}
+          onChange={setSecurityQuestion}
+          required
+          disabled={isFormSubmitting}
         />
 
-        <div className='mt-4 flex'>
+        <Input
+          placeholder='Jawaban Pertanyaan Keamanan'
+          value={securityQuestionAnswer}
+          onChange={setSecurityQuestionAnswer}
+          required
+          disabled={isFormSubmitting}
+        />
+
+        <div className='mt-2 flex'>
           <div className='flex-1'>
             <Button
               theme='secondary'

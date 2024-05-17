@@ -8,6 +8,7 @@ import { Button } from '../../../components/button';
 import { Header } from '../../../components/header';
 import { Input } from '../../../components/input';
 import { BASE_URL } from '../../../constants';
+import convertToProperSalaryString from '../../../utils/convertToProperSalaryString';
 
 
 
@@ -27,6 +28,8 @@ const PostJob = () => {
   const [requirements, setRequirements] = useState('');
   const [address, setAddress] = useState('');
   const [salary, setSalary] = useState('');
+  const [startWorkingDay, setStartWorkingDay] = useState('');
+  const [endWorkingDay, setEndWorkingDay] = useState('');
   const [startWorkingHour, setStartWorkingHour] = useState('');
   const [startWorkingMinute, setStartWorkingMinute] = useState('');
   const [endWorkingHour, setEndWorkingHour] = useState('');
@@ -66,8 +69,8 @@ const PostJob = () => {
    */
   async function handleSubmit(e) {
     e.preventDefault();
-
-    if (!name || (preferences.length === 0) || !requirements || !address || !salary || startWorkingHour === '' || parseInt(startWorkingHour) > 23 || startWorkingMinute === '' || parseInt(startWorkingMinute) > 59 || endWorkingHour === '' || parseInt(endWorkingHour) > 23 || endWorkingMinute === '' || parseInt(endWorkingMinute) > 59 || startWorkingHour > endWorkingHour) return;
+    
+    if (!name || (preferences.length === 0) || !requirements || !address || !salary || !startWorkingDay || !endWorkingDay || !startWorkingHour || parseInt(startWorkingHour) > 23 || !startWorkingMinute || parseInt(startWorkingMinute) > 59 || !endWorkingHour || parseInt(endWorkingHour) > 23 || !endWorkingMinute || parseInt(endWorkingMinute) > 59 || parseInt(startWorkingHour) > parseInt(endWorkingHour)) return;
     
     try {
       setIsFormSubmitting(true);
@@ -96,6 +99,7 @@ const PostJob = () => {
    * @returns {Array} Preferensi yang telah diperbarui.
    */
   async function submitNewPreference() {
+    console.log('submitNewPreference');
     try {
       const newPreferences = preferences.filter(preference => preference.isNew === true).map(preference => preference.label);
 
@@ -145,6 +149,10 @@ const PostJob = () => {
           deskripsi: address
         },
         gaji: parseInt(salary),
+        hariKerja: {
+          awal: startWorkingDay,
+          akhir: endWorkingDay
+        },
         jamKerja: {
           awal: `${startWorkingHour}:${startWorkingMinute}`,
           akhir: `${endWorkingHour}:${endWorkingMinute}`
@@ -153,6 +161,7 @@ const PostJob = () => {
         diterima: [],
         adaPelamarBaru: false
       };
+      console.log('submitNewJob', payload);
       
       const res = await axios.post(`${BASE_URL}/job`, payload);
       
@@ -172,7 +181,7 @@ const PostJob = () => {
       <div className='flex-1 relative flex'>
         {BurgerMenu}
         <div className='flex-1 overflow-auto p-4 sm:p-8 flex flex-col items-center'>
-          <h1 className='text-lg sm:text-2xl font-bold text-center'>Tambah Pekerjaan</h1>
+          <h1 className='text-sm sm:text-2xl font-bold text-center'>Tambah Pekerjaan</h1>
 
           <form onSubmit={handleSubmit} className='mt-4 sm:mt-8 flex flex-col gap-2 sm:gap-4 w-full lg:w-4/5'>
             <Input
@@ -199,64 +208,59 @@ const PostJob = () => {
               required
               disabled={isFormSubmitting}
             />
-            <div className='w-full flex flex-col xl:flex-row gap-2 sm:gap-4'>
-              <div className='flex-1'>
-                <Input
-                  value={salary}
-                  onChange={setSalary}
-                  placeholder='Gaji'
-                  type='number'
-                  required
-                  disabled={isFormSubmitting}
-                />
-              </div>
-              <div className='flex-1 flex items-center gap-1'>
-                <div className='flex-1'>
-                  <Input
-                    value={startWorkingHour}
-                    onChange={setStartWorkingHour}
-                    placeholder='Awal Jam Kerja (Jam)'
-                    type='number'
-                    required
-                    disabled={isFormSubmitting}
-                  />
-                </div>
-                <div>:</div>
-                <div className='flex-1'>
-                  <Input
-                    value={startWorkingMinute}
-                    onChange={setStartWorkingMinute}
-                    placeholder='Awal Jam Kerja (Menit)'
-                    type='number'
-                    required
-                    disabled={isFormSubmitting}
-                  />
-                </div>
-              </div>
-              <div className='flex-1 flex items-center gap-1'>
-                <div className='flex-1'>
-                  <Input
-                    value={endWorkingHour}
-                    onChange={setEndWorkingHour}
-                    placeholder='Akhir Jam Kerja (Jam)'
-                    type='number'
-                    required
-                    disabled={isFormSubmitting}
-                  />
-                </div>
-                <div>:</div>
-                <div className='flex-1'>
-                  <Input
-                    value={endWorkingMinute}
-                    onChange={setEndWorkingMinute}
-                    placeholder='Akhir Jam Kerja (Menit)'
-                    type='number'
-                    required
-                    disabled={isFormSubmitting}
-                  />
-                </div>
-              </div>
-            </div>
+            <Input
+              value={convertToProperSalaryString(salary)}
+              onChange={value => setSalary(value.replaceAll(',', ''))}
+              placeholder='Gaji'
+              required
+              disabled={isFormSubmitting}
+            />
+            <Input
+              value={startWorkingDay}
+              onChange={setStartWorkingDay}
+              placeholder='Awal Hari Kerja'
+              required
+              disabled={isFormSubmitting}
+            />
+            <Input
+              value={endWorkingDay}
+              onChange={setEndWorkingDay}
+              placeholder='Akhir Hari Kerja'
+              required
+              disabled={isFormSubmitting}
+            />
+            <Input
+              value={startWorkingHour}
+              onChange={setStartWorkingHour}
+              placeholder='Awal Jam Kerja (Jam)'
+              type='number'
+              required
+              disabled={isFormSubmitting}
+            />
+            <Input
+              value={startWorkingMinute}
+              onChange={setStartWorkingMinute}
+              placeholder='Awal Jam Kerja (Menit)'
+              type='number'
+              required
+              disabled={isFormSubmitting}
+            />
+            <Input
+              value={endWorkingHour}
+              onChange={setEndWorkingHour}
+              placeholder='Akhir Jam Kerja (Jam)'
+              type='number'
+              required
+              disabled={isFormSubmitting}
+            />
+            <Input
+              value={endWorkingMinute}
+              onChange={setEndWorkingMinute}
+              placeholder='Akhir Jam Kerja (Menit)'
+              type='number'
+              required
+              disabled={isFormSubmitting}
+            />
             <Input
               value={requirements}
               onChange={setRequirements}

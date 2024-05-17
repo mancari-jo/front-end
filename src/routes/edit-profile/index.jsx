@@ -148,24 +148,24 @@ const EditProfile = () => {
 
 
   return (
-    <main className='bg-1 h-screen flex overflow-auto select-none p-8 sm:p-16 items-center'>
-      <h1 className='text-lg sm:text-2xl font-bold w-full'>Edit Profil</h1>
+    <main className='bg-1 h-screen flex overflow-auto select-none p-4 items-center'>
+      <h1 className='text-sm font-bold w-full'>Edit Profil</h1>
 
       {!fetchedUser ? (
-        <div className='flex-1 mt-8 sm:mt-16 flex'>
+        <div className='text-sm flex-1 mt-4 flex'>
           <h1>Sedang memuat data ...</h1>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className='flex-1 flex flex-col gap-4 sm:gap-8 justify-center w-full max-w-96'>
+        <form onSubmit={handleSubmit} className='flex-1 flex flex-col gap-4 justify-center w-full max-w-96'>
           <div className='flex justify-center relative'>
             <img
               src={profilePicture ? profilePicture : fetchedUser.profileImage ? fetchedUser.profileImage : defaultProfilePicture}
               alt='profile'
-              className='h-20 w-20 sm:h-40 sm:w-40 rounded-full'
+              className='h-16 w-16 rounded-full'
             />
-            <div className='absolute group h-20 w-20 sm:h-40 sm:w-40 rounded-full flex justify-center items-center group'>
+            <div className='absolute group h-16 w-16 rounded-full flex justify-center items-center group'>
               <button onClick={() => fileInputRef.current.click()} className='h-full w-full rounded-full hidden justify-center items-center transition-all group-hover:flex hover:cursor-pointer hover:bg-neutral-500 hover:bg-opacity-75'>
-                <div className='text-center text-white p-2 text-xs sm:text-base'>Ganti Foto Profil</div>
+                <div className='text-center text-white p-2 text-xs'>Ganti Foto Profil</div>
                 <input type='file' accept='image/*' onChange={handleChangeProfilePicture} className='hidden' ref={fileInputRef} />
               </button>
             </div>
@@ -243,7 +243,7 @@ const EditProfile = () => {
             </>
           )}
 
-          <div className='flex gap-4'>
+          <div className='flex gap-2'>
             <Button
               theme='secondary'
               onClick={() => navigate(-1)}

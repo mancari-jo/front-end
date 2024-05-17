@@ -9,6 +9,22 @@ import { BASE_URL } from '../../constants';
 
 
 
+function getAgeFromBirthDate(birthDate) {
+  const today = new Date();
+  const birthDateObj = new Date(birthDate);
+
+  let age = today.getFullYear() - birthDateObj.getFullYear();
+  const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+    age--;
+  }
+
+  return age;
+}
+
+
+
 /**
  * Komponen untuk menampilkan profil pengguna.
  */
@@ -85,35 +101,35 @@ const Profile = () => {
 
 
   return (
-    <main className='bg-1 h-screen flex overflow-auto select-none p-8 sm:p-16'>
-      {fetchedUser && <h1 className='text-lg sm:text-2xl font-bold'>Profil {(fetchedUser.role === 'jobSeeker') ? 'Pencari Kerja' : 'Penyedia Kerja'}</h1>}
+    <main className='bg-1 h-screen flex overflow-auto select-none p-4'>
+      {fetchedUser && <h1 className='text-sm font-bold'>Profil {(fetchedUser.role === 'jobSeeker') ? 'Pencari Kerja' : 'Penyedia Kerja'}</h1>}
 
       {!fetchedUser ? (
-        <div className='flex-1 mt-8 sm:mt-16 flex justify-center items-center'>
+        <div className='text-sm flex-1 mt-4 flex justify-center items-center'>
           <h1>Sedang memuat data ...</h1>
         </div>
       ) : (
-        <div className='mt-4 sm:mt-8 flex-1 flex flex-col sm:flex-row gap-8'>
-          <section className='flex flex-col items-center sm:items-start gap-4 sm:gap-8'>
+        <div className='mt-4 flex-1 flex flex-col sm:flex-row gap-4'>
+          <section className='flex flex-col items-center sm:items-start gap-4'>
             <img
               src={fetchedUser.profilePicture || defaultProfilePicture }
               alt='profile'
-              className='h-20 w-20 sm:h-40 sm:w-40 rounded-full'
+              className='h-16 w-16 rounded-full'
             />
-            <div className='flex sm:flex-col gap-8 sm:gap-4 '>
-              <div onClick={() => navigate(-1)} className='text-primary text-lg hover:cursor-pointer hover:underline'>Kembali</div>
-              {(id === user.id) && <div onClick={() => navigate('/edit-profile')} className='text-primary text-lg hover:cursor-pointer hover:underline'>Edit Profil</div>}
+            <div className='flex sm:flex-col gap-4 sm:gap-2'>
+              <div onClick={() => navigate(-1)} className='text-primary text-sm hover:cursor-pointer hover:underline'>Kembali</div>
+              {(id === user.id) && <div onClick={() => navigate('/edit-profile')} className='text-primary text-sm hover:cursor-pointer hover:underline'>Edit Profil</div>}
             </div>
           </section>
 
-          <section className='flex-1 flex flex-col gap-8'>
-            <h2 className='text-lg sm:text-2xl'>{fetchedUser.name}</h2>
+          <section className='flex-1 flex flex-col gap-4'>
+            <h2 className='text-sm'>{fetchedUser.name}</h2>
 
             {(fetchedUser.role === 'jobSeeker') && (
               <>
                 <div>
                   <div>Rating</div>
-                  <div className='flex gap-2'>
+                  <div className='mt-1 flex items-center gap-2'>
                     <div>{fetchedUser.rating}</div>
                     {[...new Array(fetchedUser.rating)].map((_, index) => <img key={index} src={starBlue} alt='star-blue' />)}
                     {[...new Array(5 - fetchedUser.rating)].map((_, index) => <img key={index} src={starWhite} alt='star-white' />)}
@@ -122,8 +138,8 @@ const Profile = () => {
 
                 <div>
                   <div>Tentang</div>
-                  <hr className='border border-black' />
-                  <div className='mt-4 flex gap-2'>
+                  <hr className='mt-1 border border-black' />
+                  <div className='mt-2 flex gap-2'>
                     {/* labels */}
                     <div className='flex-1'>
                       <div>Tempat Lahir</div>
@@ -143,7 +159,7 @@ const Profile = () => {
                     {/* values */}
                     <div className='flex-1'>
                       <div>{fetchedUser.birthPlace ?? ''}</div>
-                      <div>{fetchedUser.birthDate ?? ''}</div>
+                      <div>{fetchedUser.birthDate ? `${fetchedUser.birthDate} (${getAgeFromBirthDate(fetchedUser.birthDate)} tahun)` : ''}</div>
                       <div>{fetchedUser.lastEducation ?? ''}</div>
                       <ol>
                         {(fetchedUser.experience.length === 0) ? (
