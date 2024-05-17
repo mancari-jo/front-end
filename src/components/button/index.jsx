@@ -20,7 +20,7 @@ const Button = ({
       onClick={onClick}
       type={type}
       disabled={disabled}
-      className={`w-full rounded p-2 text-base disabled:hover:cursor-not-allowed
+      className={`w-full rounded p-1 text-xs disabled:hover:cursor-not-allowed
         ${(theme === 'primary') ? 'text-white bg-primary' :
           (theme === 'secondary') ? 'text-black bg-neutral-100' :
           (theme === 'tertiary') ? 'text-black bg-transparent' :

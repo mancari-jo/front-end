@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/button';
 import { Header } from '../../../components/header';
 import { BASE_URL } from '../../../constants';
+import convertToProperSalaryString from '../../../utils/convertToProperSalaryString';
 
 
 
@@ -79,43 +80,48 @@ const PostedJobList = () => {
       {Nav}
       <div className='flex-1 relative flex overflow-auto'>
         {BurgerMenu}
-        <div className='flex-1 overflow-auto p-4 sm:p-8 flex flex-col items-center'>
-          <h1 className='text-lg sm:text-2xl font-bold text-center'>Daftar Pekerjaan</h1>
+        <div className='flex-1 py-4 overflow-auto flex flex-col'>
+          <h1 className='text-sm font-bold text-center'>Daftar Pekerjaan</h1>
 
-          <div className='mt-8 flex-1 w-full lg:max-w-4xl overflow-auto'>
+          <div className='mt-4 flex-1 w-full overflow-auto'>
             {!jobList ? (
-              <h2 className='text-xl bg-background px-2 py-4 rounded-lg text-center'>Sedang memuat data ...</h2>
+              <h2 className='text-xs bg-background px-1 py-2 rounded text-center'>Sedang memuat data ...</h2>
             ) : (jobList.length === 0) ? (
-              <h2 className='text-xl bg-background px-2 py-4 rounded-lg text-center'>Kosong</h2>
+              <h2 className='text-xs bg-background px-1 py-2 rounded text-center'>Kosong</h2>
             ) : (preferenceList.length > 0) && (
               <div className='flex flex-col gap-4 overflow-auto'>
                 {jobList.map((job, index) => (
-                  <div key={index} className='bg-background py-4 px-8 rounded-lg'>
-                    {job.adaPelamarBaru && <p className='font-bold text-right'>Ada Pelamar Baru!</p>}
+                  <div key={index} className='bg-background py-2 px-4 rounded flex flex-col items-center'>
+                    {job.adaPelamarBaru && <p className='font-bold text-right text-xs'>Ada Pelamar Baru!</p>}
                     <p className='flex'>
-                      <span className='w-40'>Nama Pekerjaan</span>
-                      <span>:</span>
-                      <span className='ml-2 flex-1'>{job.nama}</span>
+                      <span className='w-48'>Nama Pekerjaan</span>
+                      <span className='w-4'>:</span>
+                      <span className='w-48'>{job.nama}</span>
                     </p>
                     <p className='flex'>
-                      <span className='w-40'>Preferensi</span>
-                      <span>:</span>
-                      <span className='ml-2 flex-1'>{preferenceList.filter(preference => job.preferensi.includes(preference._id)).map(preference => preference.nama).join(', ')}</span>
+                      <span className='w-48'>Preferensi</span>
+                      <span className='w-4'>:</span>
+                      <span className='w-48'>{preferenceList.filter(preference => job.preferensi.includes(preference._id)).map(preference => preference.nama).join(', ')}</span>
                     </p>
                     <p className='flex'>
-                      <span className='w-40'>Alamat</span>
-                      <span>:</span>
-                      <span className='ml-2 flex-1'>{job.lokasi.deskripsi}</span>
+                      <span className='w-48'>Alamat</span>
+                      <span className='w-4'>:</span>
+                      <span className='w-48'>{job.lokasi.deskripsi}</span>
                     </p>
                     <p className='flex'>
-                      <span className='w-40'>Gaji</span>
-                      <span>:</span>
-                      <span className='ml-2 flex-1'>Rp. {job.gaji}</span>
+                      <span className='w-48'>Gaji</span>
+                      <span className='w-4'>:</span>
+                      <span className='w-48'>Rp. {convertToProperSalaryString(job.gaji)}</span>
                     </p>
                     <p className='flex'>
-                      <span className='w-40'>Jam Kerja</span>
-                      <span>:</span>
-                      <span className='ml-2 flex-1'>{job.jamKerja.awal} - {job.jamKerja.akhir}</span>
+                      <span className='w-48'>Hari Kerja</span>
+                      <span className='w-4'>:</span>
+                      <span className='w-48'>{job?.hariKerja?.awal} - {job?.hariKerja?.akhir}</span>
+                    </p>
+                    <p className='flex'>
+                      <span className='w-48'>Jam Kerja</span>
+                      <span className='w-4'>:</span>
+                      <span className='w-48'>{job.jamKerja.awal} - {job.jamKerja.akhir}</span>
                     </p>
 
                     <div className='mt-2 flex justify-end'>

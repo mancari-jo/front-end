@@ -21,8 +21,8 @@ const Message = () => {
       {Nav}
       <div className='flex-1 relative flex overflow-auto'>
         {BurgerMenu}
-        <div className='flex-1 flex justify-center items-center overflow-auto px-8 md:px-32 xl:px-64'>
-          <div className='bg-background p-4 rounded-lg'>
+        <div className='text-xs flex-1 flex justify-center items-center overflow-auto px-4 md:px-16 xl:px-32'>
+          <div className='bg-background p-2 rounded-lg'>
             {message}
           </div>
         </div>

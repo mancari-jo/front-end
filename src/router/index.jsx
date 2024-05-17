@@ -11,9 +11,11 @@ import { PostedJobList } from '../routes/_job-provider/posted-job-list';
 import { PostJob as JobProviderPostJob } from '../routes/_job-provider/post-job';
 import { JobDetail as JobSeekerJobDetail } from '../routes/_job-seeker/job-detail';
 import { JobPreference as JobSeekerJobPreference } from '../routes/_job-seeker/job-preference';
+import { AppliedJobList as JobSeekerAppliedJobList } from '../routes/_job-seeker/applied-job-list';
 import { Profile } from '../routes/profile';
 import { SignIn } from '../routes/sign-in';
 import { SignUp } from '../routes/sign-up';
+import { Testimony } from '../routes/testimony';
 
 
 
@@ -45,12 +47,14 @@ const Router = () => {
           <Route path='/profile/:id' element={<Profile />} />
           <Route path='/edit-profile' element={<EditProfile />} />
           <Route path='/message/:message' element={<Message />} />
+          <Route path='/testimony' element={<Testimony />} />
 
           {/* specific routes depending on user type */}
           {(user.role === 'jobSeeker') ? (
             <>
               <Route path='/job-detail/:id' element={<JobSeekerJobDetail />} />
               <Route path='/job-preference' element={<JobSeekerJobPreference />} />
+              <Route path='/applied-job-list' element={<JobSeekerAppliedJobList />} />
             </>
           ) : (user.role === 'jobProvider') && (
             <>

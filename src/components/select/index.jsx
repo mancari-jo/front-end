@@ -20,14 +20,14 @@ const Select = ({
   disabled
 }) => {
   return (
-    <div className='text-base text-black flex flex-col'>
+    <div className='text-xs text-black flex flex-col'>
       <label>{label}</label>
       <select
         value={value}
         onChange={e => onChange(e.target.value)}
         required={required}
         disabled={disabled}
-        className={`rounded p-2 hover:cursor-pointer disabled:hover:cursor-not-allowed
+        className={`rounded p-1 text-xs hover:cursor-pointer disabled:hover:cursor-not-allowed
           ${(theme === 'primary') ? 'bg-secondary text-white' :
             (theme === 'secondary') ? 'bg-white' : ''}
         `}

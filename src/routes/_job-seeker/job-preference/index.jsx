@@ -171,11 +171,11 @@ const JobPreference = () => {
       {Nav}
       <div className='flex-1 relative flex'>
         {BurgerMenu}
-        <div className='flex-1 flex flex-col items-center overflow-auto p-8'>
+        <div className='flex-1 flex flex-col items-center overflow-auto p-4'>
           {!user ? (
-            <h1 className='text-xl text-center'>Sedang memuat data pengguna ...</h1>
+            <h1 className='text-sm text-center'>Sedang memuat data pengguna ...</h1>
           ) : (
-            <form onSubmit={handleSubmit} className='w-full flex flex-col gap-4'>
+            <form onSubmit={handleSubmit} className='w-full flex flex-col gap-2'>
               <CreatableSelect
                 value={userJobPreferences.map(preference => ({ value: preference.id, label: preference.label }))}
                 onChange={arrOfObj => setUserJobPreferences(arrOfObj.map(obj => ({ id: obj.value, label: obj.label, isNew: obj.__isNew__ })))}

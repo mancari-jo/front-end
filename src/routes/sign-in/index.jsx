@@ -67,13 +67,17 @@ const SignIn = () => {
 
   return (
     <main className='bg-1 justify-center items-center p-4'>
-      <img src={logo} alt='logo' className='h-64' />
+      <div className='absolute top-2 left-2'>
+        <Button theme='tertiary' onClick={() => navigate(-1)}>Kembali</Button>
+      </div>
 
-      <div className='mt-4 font-medium text-center'>
+      <img src={logo} alt='logo' className='h-32' />
+
+      <div className='mt-2 font-medium text-center'>
         Tersedia peluang karier istimewa! Temukan pekerjaan di kantor atau di rumah. Login sekarang untuk langkah pertama menuju kesuksesan!
       </div>
 
-      <form onSubmit={handleFormOnSubmit} className='mt-8 flex flex-col gap-4 w-full max-w-96'>
+      <form onSubmit={handleFormOnSubmit} className='mt-4 flex flex-col gap-4 w-full max-w-96'>
         <Select
           value={role}
           onChange={setRole}
@@ -123,7 +127,7 @@ const SignIn = () => {
           </div>
         </div>
 
-        <div className='mt-4 flex flex-col gap-2'>
+        <div className='mt-2 flex flex-col gap-2'>
           <Button type='submit' disabled={isFormSubmitting}>Masuk</Button>
           <Button
             theme='secondary'

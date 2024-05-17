@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '../../../components/button';
 import { Header } from '../../../components/header';
 import { BASE_URL } from '../../../constants';
+import convertToProperSalaryString from '../../../utils/convertToProperSalaryString';
 
 import { StopEmployeeModal } from './StopEmployeeModal';
 
@@ -299,7 +300,8 @@ const JobDetail = () => {
 
       const newJob = {
         ...job,
-        pelamar: job.pelamar.filter(thisJob => thisJob._id !== applicant._id)
+        pelamar: job.pelamar.filter(thisJob => thisJob._id !== applicant._id),
+        ditolak: job.ditolak ? [...job.ditolak, applicant._id] : [applicant._id]
       };
 
       await patchUser(newUser);
@@ -384,13 +386,13 @@ const JobDetail = () => {
         <div className='flex-1 relative flex overflow-auto'>
           {BurgerMenu}
           <div className='flex-1 overflow-auto p-4 sm:p-8 flex flex-col items-center'>
-            <h1 className='text-lg sm:text-2xl font-bold text-center'>Detail Pekerjaan</h1>
+            <h1 className='text-sm font-bold text-center'>Detail Pekerjaan</h1>
 
-            <div className='mt-8 flex-1 w-full lg:max-w-4xl overflow-auto'>
+            <div className='mt-4 flex-1 w-full lg:max-w-4xl overflow-auto'>
               {!job ? (
-                <h2 className='text-xl bg-background px-2 py-4 rounded-lg text-center'>Sedang memuat data ...</h2>
+                <h2 className='text-sm bg-background px-2 py-4 rounded-lg text-center'>Sedang memuat data ...</h2>
               ) : (
-                <div className='bg-background py-4 px-8 rounded-lg h-full overflow-auto'>
+                <div className='bg-background py-2 px-4 rounded-lg h-full overflow-auto'>
                   {job.adaPelamarBaru && <p className='font-bold text-right'>Ada Pelamar Baru!</p>}
 
                   <p className='flex'>
@@ -416,7 +418,7 @@ const JobDetail = () => {
                   <p className='flex'>
                     <span className='w-40'>Gaji</span>
                     <span>:</span>
-                    <span className='ml-2 flex-1'>Rp. {job.gaji}</span>
+                    <span className='ml-2 flex-1'>Rp. {convertToProperSalaryString(job.gaji)}</span>
                   </p>
                   <p className='flex'>
                     <span className='w-40'>Jam Kerja</span>
@@ -434,19 +436,19 @@ const JobDetail = () => {
                     <span className='ml-2 flex-1'>{(job.status === 'open') ? 'Dibuka' : 'Ditutup'}</span>
                   </p>
 
-                  <div className='mt-16 flex justify-end'>
+                  <div className='mt-4 flex justify-end'>
                     <div>
                       <Button theme={job.status === 'open' ? 'danger' : 'primary'} onClick={toggleJobStatus} disabled={isFormSubmitting}>{job.status === 'open' ? 'Tutup' : 'Buka'} Pekerjaan</Button>
                     </div>
                   </div>
 
-                  <div className='mt-16'>
-                    <h2 className='border-b-2 border-black text-xl'>Daftar Karyawan yang sudah berhenti</h2>
-                    <div className='mt-4 flex flex-col gap-4'>
+                  <div className='mt-4'>
+                    <h2 className='border-b-2 border-black text-sm'>Daftar Karyawan yang sudah berhenti</h2>
+                    <div className='mt-2 flex flex-col gap-4'>
                       {(stoppedEmployeeList.length === 0) ? (
-                        <h2 className='text-xl text-center'>Kosong</h2>
+                        <h2 className='text-sm text-center'>Kosong</h2>
                       ) : stoppedEmployeeList.map((employee, index) => (
-                        <div key={index} className='py-2 px-4 rounded-lg' style={{backgroundColor: '#C6C7C9'}}>
+                        <div key={index} className='py-1 px-2 rounded-lg' style={{backgroundColor: '#C6C7C9'}}>
                           <p className='flex'>
                             <span className='w-16'>Nama</span>
                             <span>:</span>
@@ -462,13 +464,13 @@ const JobDetail = () => {
                     </div>
                   </div>
 
-                  <div className='mt-16'>
-                    <h2 className='border-b-2 border-black text-xl'>Daftar Karyawan yang sedang bekerja</h2>
-                    <div className='mt-4 flex flex-col gap-4'>
+                  <div className='mt-4'>
+                    <h2 className='border-b-2 border-black text-sm'>Daftar Karyawan yang sedang bekerja</h2>
+                    <div className='mt-2 flex flex-col gap-4'>
                       {(workingEmployeeList.length === 0) ? (
-                        <h2 className='text-xl text-center'>Kosong</h2>
+                        <h2 className='text-sm text-center'>Kosong</h2>
                       ) : workingEmployeeList.map((employee, index) => (
-                        <div key={index} className='py-2 px-4 rounded-lg' style={{backgroundColor: '#C6C7C9'}}>
+                        <div key={index} className='py-1 px-2 rounded-lg' style={{backgroundColor: '#C6C7C9'}}>
                           <p className='flex'>
                             <span className='w-16'>Nama</span>
                             <span>:</span>
@@ -477,7 +479,7 @@ const JobDetail = () => {
                           <div className='mt-2 flex justify-end'>
                             <div className='flex gap-2'>
                               <Button theme='secondary' onClick={() => handleUserProfileOnClick(employee)} disabled={isFormSubmitting}>Profil</Button>
-                              <Button theme='danger' onClick={() => handleEmployeeOnStop(employee)} disabled={isFormSubmitting}>Hentikan</Button>
+                              <Button theme='danger' onClick={() => handleEmployeeOnStop(employee)} disabled={isFormSubmitting}>Selesai</Button>
                             </div>
                           </div>
                         </div>
@@ -485,13 +487,13 @@ const JobDetail = () => {
                     </div>
                   </div>
 
-                  <div className='mt-16'>
-                    <h2 className='border-b-2 border-black text-xl'>Daftar Pelamar</h2>
-                    <div className='mt-4 flex flex-col gap-4'>
+                  <div className='mt-4'>
+                    <h2 className='border-b-2 border-black text-sm'>Daftar Pelamar</h2>
+                    <div className='mt-2 flex flex-col gap-4'>
                       {(applicantList.length === 0) ? (
-                        <h2 className='text-xl text-center'>Kosong</h2>
+                        <h2 className='text-sm text-center'>Kosong</h2>
                       ) : applicantList.map((applicant, index) => (
-                        <div key={index} className='py-2 px-4 rounded-lg' style={{backgroundColor: '#C6C7C9'}}>
+                        <div key={index} className='py-1 px-2 rounded-lg' style={{backgroundColor: '#C6C7C9'}}>
                           <p className='flex'>
                             <span className='w-16'>Nama</span>
                             <span>:</span>

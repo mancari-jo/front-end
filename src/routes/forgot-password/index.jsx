@@ -8,6 +8,7 @@ import { BASE_URL } from '../../constants';
 import { PasswordInputsForm } from './PasswordInputs';
 import { Success } from './Success';
 import { UsernameInputForm } from './UsernameInputForm';
+import { SecurityQuestionForm } from './SecurityQuestionForm';
 
 
 
@@ -20,6 +21,10 @@ const ForgotPassword = () => {
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('jobSeeker');
   const [id, setId] = useState(null);
+  const [securityQuestion, setSecurityQuestion] = useState('');
+  const [securityQuestionCorrectAnswer, setSecurityQuestionCorrectAnswer] = useState('');
+  const [securityQuestionUserAnswer, setSecurityQuestionUserAnswer] = useState('');
+  const [isSecurityQuestionAnswerCorrect, setIsSecurityQuestionAnswerCorrect] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isPasswordChanged, setIsPasswordChanged] = useState(false);
@@ -44,11 +49,39 @@ const ForgotPassword = () => {
       if (!res.data?.status) throw new Error();
 
       setId(res.data.data);
+      getSecurityQuestion(res.data.data);
     } catch (err) {
       console.error('Unable to get username: ', err);
     } finally {
       setIsFormSubmitting(false);
     }
+  }
+
+  async function getSecurityQuestion(id) {
+    try {
+      setIsFormSubmitting(true);
+
+      if (!username) return;
+      
+      const res = await axios.get(`${BASE_URL}/user/${id}`);
+
+      if (!res.data?.status) throw new Error();
+
+      setSecurityQuestion(res.data.data.pemulihanKataSandi.pertanyaan);
+      setSecurityQuestionCorrectAnswer(res.data.data.pemulihanKataSandi.jawaban);
+    } catch (err) {
+      console.error('Unable to get username: ', err);
+    } finally {
+      setIsFormSubmitting(false);
+    }
+  }
+
+  async function handleSecurityQuestionFormOnSubmit(e) {
+    e.preventDefault();
+
+    if (securityQuestionCorrectAnswer !== securityQuestionUserAnswer) return;
+    
+    setIsSecurityQuestionAnswerCorrect(true);
   }
 
   /**
@@ -85,9 +118,9 @@ const ForgotPassword = () => {
 
   return (
     <main className='bg-1 justify-center items-center p-4'>
-      <img src={logo} alt='logo' className='h-64' />
+      <img src={logo} alt='logo' className='h-32' />
 
-      <div className='mt-16 w-full max-w-96'>
+      <div className='mt-8 w-full max-w-96'>
         {!id && (
           <UsernameInputForm
             handleFormOnSubmit={handleUsernameFormOnSubmit}
@@ -97,7 +130,16 @@ const ForgotPassword = () => {
           />
         )}
 
-        {(id && !isPasswordChanged) && (
+        {(id && securityQuestion && !isSecurityQuestionAnswerCorrect) && (
+          <SecurityQuestionForm
+            handleFormOnSubmit={handleSecurityQuestionFormOnSubmit}
+            securityQuestion={securityQuestion}
+            securityQuestionUserAnswer={securityQuestionUserAnswer} setSecurityQuestionUserAnswer={setSecurityQuestionUserAnswer}
+            isFormSubmitting={isFormSubmitting}
+          />
+        )}
+
+        {(isSecurityQuestionAnswerCorrect && !isPasswordChanged) && (
           <PasswordInputsForm
             handleFormOnSubmit={handlePasswordsFormOnSubmit}
             password={password} setPassword={setPassword}
